@@ -18,3 +18,8 @@ Running
 Options can be provided via command line parameters. For details:
 
 ```python jabber-hal.py --help```
+
+Activating Plugins
+------------------
+
+To activate a plugin, copy the plugin's files from "plugins_all" to "plugins_enabled", in the project's base directory.
