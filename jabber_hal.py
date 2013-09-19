@@ -3,7 +3,10 @@ import logging
 import getpass
 from optparse import OptionParser
 
+from message_plugin import MessagePlugin
+
 import sleekxmpp
+from yapsy.PluginManager import PluginManager
 
 if sys.version_info < (3, 0):
     reload(sys)
@@ -19,6 +22,17 @@ class MUCBot(sleekxmpp.ClientXMPP):
         self.room = room
         self.nick = nick
 
+        # Load plugins
+        self.plugin_manager = PluginManager()
+        self.plugin_manager.setPluginPlaces(["plugins"])
+        self.plugin_manager.setCategoriesFilter({
+            "Message" : MessagePlugin
+        })
+        self.plugin_manager.collectPlugins()
+        # Activate all loaded plugins
+        for pluginInfo in self.plugin_manager.getAllPlugins():
+           self.plugin_manager.activatePluginByName(pluginInfo.name)
+
         self.add_event_handler("session_start", self.start)
         self.add_event_handler("message", self.message)
         self.add_event_handler("groupchat_message", self.muc_message)
@@ -27,21 +41,21 @@ class MUCBot(sleekxmpp.ClientXMPP):
     def start(self, event):
         self.get_roster()
         self.send_presence()
-        self.plugin['xep_0045'].joinMUC(self.room,
-                                        self.nick,
-                                        # If a room password is needed, use:
-                                        # password=the_room_password,
-                                        wait=True)
+        if self.room and len(self.room) > 0:
+            self.plugin['xep_0045'].joinMUC(self.room,
+                                            self.nick,
+                                            wait=True)
 
     def message(self, msg):
         if msg['type'] in ('chat', 'normal'):
-            #msg.reply("Thanks for sending\n%(body)s" % msg).send()
-            msg.reply("Umm...").send()
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
+                pluginInfo.plugin_object.message_received(msg)
 
     def muc_message(self, msg):
-        if msg['mucnick'] != self.nick and self.nick in msg['body']:
-            #self.send_message(mto=msg['from'].bare, mbody="I heard that, %s." % msg['mucnick'], mtype='groupchat')
-            pass
+        if msg['mucnick'] != self.nick and msg['body'].startswith("%s " % self.nick):
+            #self.send_message(mto=msg['from'].bare, mbody="Yes, master %s." % msg['mucnick'], mtype='groupchat')
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
+                pluginInfo.plugin_object.message_received(msg, nick=self.nick)
 
     def muc_online(self, presence):
         if presence['muc']['nick'] != self.nick:
