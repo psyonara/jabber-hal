@@ -1,5 +1,5 @@
 *.py[cod]
-plugins/*
+plugins_enabled/*
 
 # C extensions
 *.so
