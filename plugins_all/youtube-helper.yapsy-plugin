@@ -1,0 +1,9 @@
+[Core]
+Name = Youtube Helper
+Module = youtube-helper
+
+[Documentation]
+Description = A Youtube helper that prints out video title and length.
+Author = Helmut Irle
+Version = 0.1
+Website = None
