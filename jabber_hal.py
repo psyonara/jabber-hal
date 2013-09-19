@@ -24,7 +24,7 @@ class MUCBot(sleekxmpp.ClientXMPP):
 
         # Load plugins
         self.plugin_manager = PluginManager()
-        self.plugin_manager.setPluginPlaces(["plugins"])
+        self.plugin_manager.setPluginPlaces(["plugins_enabled"])
         self.plugin_manager.setCategoriesFilter({
             "Message" : MessagePlugin
         })
@@ -52,7 +52,7 @@ class MUCBot(sleekxmpp.ClientXMPP):
                 pluginInfo.plugin_object.message_received(msg)
 
     def muc_message(self, msg):
-        if msg['mucnick'] != self.nick and msg['body'].startswith("%s " % self.nick):
+        if msg['mucnick'] != self.nick:
             #self.send_message(mto=msg['from'].bare, mbody="Yes, master %s." % msg['mucnick'], mtype='groupchat')
             for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
                 pluginInfo.plugin_object.message_received(msg, nick=self.nick)
