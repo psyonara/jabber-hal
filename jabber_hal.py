@@ -1,6 +1,8 @@
-import sys
-import logging
+import ConfigParser
 import getpass
+import logging
+import os
+import sys
 from optparse import OptionParser
 
 from message_plugin import MessagePlugin
@@ -93,14 +95,24 @@ if __name__ == '__main__':
     logging.basicConfig(level=opts.loglevel,
                         format='%(levelname)-8s %(message)s')
 
+    jid, password, room, nick = None, None, None, None
+    if os.path.exists("connect.ini"):
+        conf = ConfigParser.ConfigParser()
+        conf.read("connect.ini")
+
+        jid = conf.get("account", "jid")
+        password = conf.get("account", "pwd")
+        room = conf.get("muc", "room")
+        nick = conf.get("muc", "nick")
+
     if opts.jid is None:
-        opts.jid = raw_input("Username: ")
+        opts.jid = jid if jid else raw_input("Username: ")
     if opts.password is None:
-        opts.password = getpass.getpass("Password: ")
+        opts.password = password if password else getpass.getpass("Password: ")
     if opts.room is None:
-        opts.room = raw_input("MUC room: ")
+        opts.room = room if room else raw_input("MUC room: ")
     if opts.nick is None:
-        opts.nick = raw_input("MUC nickname: ")
+        opts.nick = nick if nick else raw_input("MUC nickname: ")
 
     xmpp = MUCBot(opts.jid, opts.password, opts.room, opts.nick)
     xmpp.register_plugin('xep_0045') # Multi-User Chat
