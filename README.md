@@ -19,7 +19,7 @@ Options can be provided via command line parameters. For details:
 
 ```python jabber-hal.py --help```
 
-Parameters can also be provided from an ini file:
+Parameters can also be provided from an ini file ("connect.ini"):
 
 ```
 [account]
