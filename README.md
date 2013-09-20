@@ -19,6 +19,18 @@ Options can be provided via command line parameters. For details:
 
 ```python jabber-hal.py --help```
 
+Parameters can also be provided from an ini file:
+
+```
+[account]
+jid=user@server.ext
+pwd=password
+
+[muc]
+room=room_name
+nick=nick_name
+```
+
 Activating Plugins
 ------------------
 
