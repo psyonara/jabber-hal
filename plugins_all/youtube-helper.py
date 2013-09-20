@@ -2,8 +2,10 @@ from message_plugin import MessagePlugin
 
 from urllib2 import urlopen
 from urlparse import urlparse, parse_qs
+import datetime
 import re
 import xml.etree.ElementTree as ET
+
 
 class YoutubeHelper(MessagePlugin):
 
@@ -25,13 +27,13 @@ class YoutubeHelper(MessagePlugin):
                         root = ET.fromstring(xml_data)
                         video_title = ""
                         video_duration = ""
-                        for k in range(0, len(root)-1):
+                        for k in range(0, len(root) - 1):
                             if root[k].tag.endswith("title"):
                                 video_title = root[k].text
                             if root[k].tag.endswith("group"):
                                 for child in root[k].getchildren():
                                     if child.tag.endswith("duration"):
                                         video_duration = child.attrib['seconds']
-                        new_msg += "Video: %s (%s seconds)" % (video_title, video_duration)
+                        new_msg += "Video: %s (%s)" % (video_title, str(datetime.timedelta(seconds=int(video_duration))))
                         fh.close()
             msg.reply(new_msg).send()
