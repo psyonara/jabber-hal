@@ -1,0 +1,9 @@
+[Core]
+Name = Logging Helper
+Module = logging-helper
+
+[Documentation]
+Description = A logging helper that logs group chats and gets missed messages from when a user was offline.
+Author = Helmut Irle
+Version = 0.1
+Website = None
