@@ -41,7 +41,7 @@ class MUCBot(sleekxmpp.ClientXMPP):
         self.add_event_handler("message", self.message)
         self.add_event_handler("groupchat_message", self.muc_message)
         self.add_event_handler("muc::%s::got_online" % self.room, self.muc_online)
-        #self.add_event_handler("muc::%s::got_offline" % self.room, self.muc_offline)
+        self.add_event_handler("muc::%s::got_offline" % self.room, self.muc_offline)
 
     def start(self, event):
         self.get_roster()
@@ -65,6 +65,11 @@ class MUCBot(sleekxmpp.ClientXMPP):
         if presence['muc']['nick'] != self.nick:
             for pluginInfo in self.plugin_manager.getPluginsOfCategory("Presence"):
                 pluginInfo.plugin_object.got_online(self, presence)
+
+    def muc_offline(self, presence):
+        if presence['muc']['nick'] != self.nick:
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Presence"):
+                pluginInfo.plugin_object.got_offline(self, presence)
 
 if __name__ == '__main__':
     # Setup the command line arguments.

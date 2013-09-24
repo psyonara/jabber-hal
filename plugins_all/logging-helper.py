@@ -44,3 +44,9 @@ class LoggingHelper(MessagePlugin, PresencePlugin):
         item["room"] = presence["from"].bare
         item["text"] = self.str_from_presence(presence, "online")
         self.q.put(item)
+
+    def got_offline(self, xmpp_client, presence):
+        item = {}
+        item["room"] = presence["from"].bare
+        item["text"] = self.str_from_presence(presence, "offline")
+        self.q.put(item)
