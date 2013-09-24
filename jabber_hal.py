@@ -6,6 +6,7 @@ import sys
 from optparse import OptionParser
 
 from message_plugin import MessagePlugin
+from presence_plugin import PresencePlugin
 
 import sleekxmpp
 from yapsy.PluginManager import PluginManager
@@ -28,7 +29,8 @@ class MUCBot(sleekxmpp.ClientXMPP):
         self.plugin_manager = PluginManager()
         self.plugin_manager.setPluginPlaces(["plugins_enabled"])
         self.plugin_manager.setCategoriesFilter({
-            "Message" : MessagePlugin
+            "Message" : MessagePlugin,
+            "Presence": PresencePlugin
         })
         self.plugin_manager.collectPlugins()
         # Activate all loaded plugins
@@ -39,6 +41,7 @@ class MUCBot(sleekxmpp.ClientXMPP):
         self.add_event_handler("message", self.message)
         self.add_event_handler("groupchat_message", self.muc_message)
         self.add_event_handler("muc::%s::got_online" % self.room, self.muc_online)
+        #self.add_event_handler("muc::%s::got_offline" % self.room, self.muc_offline)
 
     def start(self, event):
         self.get_roster()
@@ -55,14 +58,13 @@ class MUCBot(sleekxmpp.ClientXMPP):
 
     def muc_message(self, msg):
         if msg['mucnick'] != self.nick:
-            #self.send_message(mto=msg['from'].bare, mbody="Yes, master %s." % msg['mucnick'], mtype='groupchat')
             for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
                 pluginInfo.plugin_object.message_received(msg, nick=self.nick)
 
     def muc_online(self, presence):
         if presence['muc']['nick'] != self.nick:
-            #self.send_message(mto=presence['from'].bare, mbody="Hello, %s %s" % (presence['muc']['role'], presence['muc']['nick']), mtype='groupchat')
-            pass
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Presence"):
+                pluginInfo.plugin_object.got_online(self, presence)
 
 if __name__ == '__main__':
     # Setup the command line arguments.
