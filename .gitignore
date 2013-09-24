@@ -1,6 +1,7 @@
 *.py[cod]
 plugins_enabled/*
 *.ini
+logs/
 
 # C extensions
 *.so
