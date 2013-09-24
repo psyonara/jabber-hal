@@ -30,7 +30,7 @@ class LoggingHelper(MessagePlugin, PresencePlugin):
 
     def str_from_presence(self, presence, status):
         now = datetime.datetime.now()
-        return "(%s) %s is %s." % (now.strftime("%d/%m/%Y %H:%M:%S"), presence["from"].resouce, status)
+        return "(%s) %s is %s.\n" % (now.strftime("%d/%m/%Y %H:%M:%S"), presence["from"].resource, status)
 
     def message_received(self, msg, nick=""):
         if msg['type'] == 'groupchat':
