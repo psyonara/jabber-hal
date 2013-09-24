@@ -1,0 +1,9 @@
+[Core]
+Name = Command Helper
+Module = command-helper
+
+[Documentation]
+Description = A shell command helper that runs shell commands found in a config file.
+Author = Helmut Irle
+Version = 0.1
+Website = None
