@@ -1,4 +1,4 @@
-Yapsy==1.9.2
+Yapsy==1.10.2-pythons2n3
 argparse==1.2.1
 distribute==0.7.3
 pyasn1==0.1.7
