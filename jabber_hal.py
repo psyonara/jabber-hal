@@ -7,7 +7,6 @@ from optparse import OptionParser
 
 from message_plugin import MessagePlugin
 from presence_plugin import PresencePlugin
-from command_plugin import CommandPlugin
 
 import sleekxmpp
 from yapsy.PluginManager import PluginManager
