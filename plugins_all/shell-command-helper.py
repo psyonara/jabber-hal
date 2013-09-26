@@ -2,5 +2,6 @@ from message_plugin import MessagePlugin
 
 class ShellCommandHelper(MessagePlugin):
 
-    pass
+    def message_received(self, msg, nick):
+        pass
 
