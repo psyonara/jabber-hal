@@ -1,6 +1,6 @@
 [Core]
-Name = Command Helper
-Module = command-helper
+Name = Shell Command Helper
+Module = shell-command-helper
 
 [Documentation]
 Description = A shell command helper that runs shell commands found in a config file.
