@@ -31,8 +31,7 @@ class MUCBot(sleekxmpp.ClientXMPP):
         self.plugin_manager.setPluginPlaces(["plugins_enabled"])
         self.plugin_manager.setCategoriesFilter({
             "Message" : MessagePlugin,
-            "Presence": PresencePlugin,
-            "Command": CommandPlugin
+            "Presence": PresencePlugin
         })
         self.plugin_manager.collectPlugins()
         # Activate all loaded plugins
@@ -57,15 +56,15 @@ class MUCBot(sleekxmpp.ClientXMPP):
         if msg['type'] in ('chat', 'normal'):
             for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
                 pluginInfo.plugin_object.message_received(msg)
-            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Command"):
-                pluginInfo.plugin_object.command_received(self, msg)
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("ShellCommand"):
+                pluginInfo.plugin_object.shell_command_received(self, msg)
 
     def muc_message(self, msg):
         if msg['mucnick'] != self.nick:
             for pluginInfo in self.plugin_manager.getPluginsOfCategory("Message"):
                 pluginInfo.plugin_object.message_received(msg, nick=self.nick)
-            for pluginInfo in self.plugin_manager.getPluginsOfCategory("Command"):
-                pluginInfo.plugin_object.command_received(self, msg)
+            for pluginInfo in self.plugin_manager.getPluginsOfCategory("ShellCommand"):
+                pluginInfo.plugin_object.shell_command_received(self, msg)
 
     def muc_online(self, presence):
         if presence['muc']['nick'] != self.nick:
