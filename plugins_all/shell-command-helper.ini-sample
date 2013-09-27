@@ -1,0 +1,8 @@
+[commands_all]
+date=date
+
+[commands_multi]
+top=top -b -n 1 | head -n 5
+
+[commands_single]
+top=top -b -n 1 | head -n 5
